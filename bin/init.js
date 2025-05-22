@@ -13,7 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const src = path.join(__dirname, "../src/worker.js");
 
-console.log("\n🛠  Setting up service worker for push-notifier...\n");
+console.log(
+  "\n🛠  Setting up service worker for notification-service-worker...\n"
+);
 
 // 1. Check if 'public' directory exists, if not, create it
 if (!fs.existsSync(publicDir)) {
@@ -27,17 +29,17 @@ console.log(`✅ Copied service worker to: ./public/worker.js`);
 
 // 3. Check if push-notifier is installed
 const isInstalled = fs.existsSync(
-  path.join(cwd, "node_modules", "push-notifier")
+  path.join(cwd, "node_modules", "notification-service-worker")
 );
 
 if (!isInstalled) {
   console.warn(
-    `\n⚠️  Looks like 'push-notifier' isn't installed as a dependency.\n` +
+    `\n⚠️  Looks like 'notification-service-worker' isn't installed as a dependency.\n` +
       `   To use the push logic in your frontend code, run:\n\n` +
-      `   👉 npm install push-notifier\n`
+      `   👉 npm install notification-service-worker\n`
   );
 } else {
-  console.log(`📦 Detected 'push-notifier' is installed.`);
+  console.log(`📦 Detected 'notification-service-worker' is installed.`);
 }
 
 // 4. Final message

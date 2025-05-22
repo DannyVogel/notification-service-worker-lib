@@ -22,7 +22,8 @@
     "declaration": true,
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": ["./node_modules/@types", "./dist/index.d.ts"]
   },
   "include": ["src"]
 }

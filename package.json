@@ -1,11 +1,20 @@
 {
   "name": "notification-service-worker-lib",
-  "private": true,
-  "version": "0.0.1",
+  "private": false,
+  "description": "A library for sending notifications to the service worker",
+  "version": "0.0.3",
   "type": "module",
-  "main": "dist/notification-service-worker.cjs.js",
-  "module": "dist/notification-service-worker.es.js",
-  "types": "dist/main.d.ts",
+  "main": "dist/notification-service-worker.cjs",
+  "module": "dist/notification-service-worker.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/notification-service-worker.js",
+      "require": "./dist/notification-service-worker.cjs",
+      "default": "./dist/notification-service-worker.js"
+    }
+  },
   "bin": {
     "init": "./bin/init.js"
   },
@@ -17,5 +26,9 @@
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@types/node": "^22.15.21",
+    "vite-plugin-dts": "^4.5.4"
   }
 }
