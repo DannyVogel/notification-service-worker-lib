@@ -2,8 +2,16 @@
   "name": "notification-service-worker-lib",
   "private": false,
   "description": "A library for sending notifications to the service worker",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DannyVogel/notification-service-worker-lib"
+  },
+  "homepage": "https://github.com/DannyVogel/notification-service-worker-lib#readme",
+  "bugs": {
+    "url": "https://github.com/DannyVogel/notification-service-worker-lib/issues"
+  },
   "main": "dist/notification-service-worker.cjs",
   "module": "dist/notification-service-worker.js",
   "types": "dist/index.d.ts",
