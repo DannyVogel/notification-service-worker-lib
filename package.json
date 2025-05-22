@@ -1,0 +1,21 @@
+{
+  "name": "notification-service-worker-lib",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/notification-service-worker.cjs.js",
+  "module": "dist/notification-service-worker.es.js",
+  "types": "dist/main.d.ts",
+  "bin": {
+    "init": "./bin/init.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
