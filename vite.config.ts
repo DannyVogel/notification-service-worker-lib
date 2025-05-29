@@ -7,8 +7,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "notification-service-worker",
-      fileName: "notification-service-worker",
+      name: "webpushkit",
+      fileName: "webpushkit",
       formats: ["es", "cjs"],
     },
     outDir: "dist",

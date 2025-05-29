@@ -1,26 +1,26 @@
 {
-  "name": "notification-service-worker-lib",
+  "name": "webpushkit",
   "private": false,
-  "description": "A library for sending notifications to the service worker",
+  "description": "A library for setting up web push notifications in frontend web clients.",
   "version": "0.0.4",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DannyVogel/notification-service-worker-lib"
+    "url": "https://github.com/DannyVogel/webpushkit"
   },
-  "homepage": "https://github.com/DannyVogel/notification-service-worker-lib#readme",
+  "homepage": "https://github.com/DannyVogel/webpushkit#readme",
   "bugs": {
-    "url": "https://github.com/DannyVogel/notification-service-worker-lib/issues"
+    "url": "https://github.com/DannyVogel/webpushkit/issues"
   },
-  "main": "dist/notification-service-worker.cjs",
-  "module": "dist/notification-service-worker.js",
+  "main": "dist/webpushkit.cjs",
+  "module": "dist/webpushkit.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/notification-service-worker.js",
-      "require": "./dist/notification-service-worker.cjs",
-      "default": "./dist/notification-service-worker.js"
+      "import": "./dist/webpushkit.js",
+      "require": "./dist/webpushkit.cjs",
+      "default": "./dist/webpushkit.js"
     }
   },
   "bin": {

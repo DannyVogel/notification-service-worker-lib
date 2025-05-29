@@ -1,6 +1,6 @@
-# Notification Service Worker Library
+# webpushkit
 
-A lightweight JavaScript library for implementing web push notifications in browser applications. This library simplifies the process of setting up service workers for push notifications.
+A lightweight JavaScript library for setting up web push notifications in frontend web clients. This library simplifies the process of registering service workers and managing push notification subscriptions.
 
 ## Features
 
@@ -11,13 +11,13 @@ A lightweight JavaScript library for implementing web push notifications in brow
 ## Installation
 
 ```bash
-npm install notification-service-worker-lib
+npm install webpushkit
 ```
 
 After installation, run the setup command to initialize the service worker:
 
 ```bash
-npx notification-service-worker init
+npx webpushkit init
 ```
 
 This will copy the service worker file to your project's `public` directory.
@@ -27,7 +27,7 @@ This will copy the service worker file to your project's `public` directory.
 Import and initialize the push notification system in your application:
 
 ```javascript
-import { initPushNotifications } from "notification-service-worker-lib";
+import { initPushNotifications } from "webpushkit";
 
 initPushNotifications({
   vapidPublicKey: "YOUR_VAPID_PUBLIC_KEY",
@@ -69,3 +69,5 @@ Initializes the push notification system by registering a service worker and req
 - Modern browser with Service Worker and Push API support
 - VAPID keys for Web Push (can be generated using web-push libraries)
 - Backend service to store subscriptions and send push messages
+
+[webpushkit repository](https://github.com/DannyVogel/webpushkit)
