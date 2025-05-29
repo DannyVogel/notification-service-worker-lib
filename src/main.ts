@@ -1,11 +1,13 @@
 export interface PushInitConfig {
   vapidPublicKey: string;
-  subscribeUrl: string;
-  sendNotificationUrl?: string;
   serviceWorkerPath?: string;
   onPermissionDenied?: () => void;
   onSuccess?: (subscription: PushSubscription) => void;
 }
+
+const PUSH_SERVICE_BASE_URL = "https://push-service-8l4z.onrender.com";
+const SUBSCRIBE_ENDPOINT = `${PUSH_SERVICE_BASE_URL}/api/subscribe`;
+const NOTIFY_ENDPOINT = `${PUSH_SERVICE_BASE_URL}/api/notify`;
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -52,7 +54,7 @@ export async function initPushNotifications(config: PushInitConfig): Promise<{
       applicationServerKey: urlBase64ToUint8Array(config.vapidPublicKey),
     });
 
-    const response = await fetch(config.subscribeUrl, {
+    const response = await fetch(SUBSCRIBE_ENDPOINT, {
       method: "POST",
       body: JSON.stringify(subscription),
       headers: {
@@ -102,10 +104,7 @@ export async function triggerPushNotification(
     if (!subscription)
       return { success: false, error: "Push subscription not found" };
 
-    if (!config.sendNotificationUrl)
-      return { success: false, error: "Send URL not found" };
-
-    const response = await fetch(config.sendNotificationUrl, {
+    const response = await fetch(NOTIFY_ENDPOINT, {
       method: "POST",
       body: JSON.stringify({
         subscription,
