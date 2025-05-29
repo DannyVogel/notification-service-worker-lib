@@ -86,15 +86,12 @@ export async function initPushNotifications(config: PushInitConfig): Promise<{
   }
 }
 
-export async function triggerPushNotification(
-  config: PushInitConfig,
-  notification: {
-    title: string;
-    body: string;
-    icon?: string;
-    data?: Record<string, any>;
-  }
-): Promise<{ success: boolean; error?: string }> {
+export async function triggerPushNotification(notification: {
+  title: string;
+  body: string;
+  icon?: string;
+  data?: Record<string, any>;
+}): Promise<{ success: boolean; error?: string }> {
   try {
     const registration = await navigator.serviceWorker.getRegistration();
     if (!registration)
