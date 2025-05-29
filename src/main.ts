@@ -1,6 +1,7 @@
 export interface PushInitConfig {
   vapidPublicKey: string;
   subscribeUrl: string;
+  sendNotificationUrl?: string;
   onPermissionDenied?: () => void;
   onSuccess?: (subscription: PushSubscription) => void;
 }
@@ -49,5 +50,53 @@ export async function initPushNotifications(
     config.onSuccess?.(subscription);
   } catch (err) {
     console.error("Push notification setup failed:", err);
+  }
+}
+
+export async function triggerPushNotification(
+  config: PushInitConfig,
+  notification: {
+    title: string;
+    body: string;
+    icon?: string;
+    data?: Record<string, any>;
+  }
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (!registration)
+      return { success: false, error: "Service worker not found" };
+
+    const subscription = await registration.pushManager.getSubscription();
+    if (!subscription)
+      return { success: false, error: "Push subscription not found" };
+
+    if (!config.sendNotificationUrl)
+      return { success: false, error: "Send URL not found" };
+
+    const response = await fetch(config.sendNotificationUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        subscription,
+        notification,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: `HTTP ${response.status}: ${response.statusText}`,
+      };
+    }
+
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
   }
 }
