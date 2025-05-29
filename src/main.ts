@@ -86,7 +86,7 @@ export async function initPushNotifications(config: PushInitConfig): Promise<{
   }
 }
 
-export async function triggerPushNotification(notification: {
+export async function triggerPushNotification(payload: {
   title: string;
   body: string;
   icon?: string;
@@ -105,7 +105,7 @@ export async function triggerPushNotification(notification: {
       method: "POST",
       body: JSON.stringify({
         subscription,
-        notification,
+        payload,
       }),
       headers: {
         "Content-Type": "application/json",
