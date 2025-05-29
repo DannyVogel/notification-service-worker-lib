@@ -2,6 +2,7 @@ export interface PushInitConfig {
   vapidPublicKey: string;
   subscribeUrl: string;
   sendNotificationUrl?: string;
+  serviceWorkerPath?: string;
   onPermissionDenied?: () => void;
   onSuccess?: (subscription: PushSubscription) => void;
 }
@@ -17,21 +18,33 @@ function urlBase64ToUint8Array(base64String: string) {
   return outputArray;
 }
 
-export async function initPushNotifications(
-  config: PushInitConfig
-): Promise<void> {
-  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    console.warn("Push notifications are not supported in this browser.");
-    return;
+export function isPushNotificationSupported(): boolean {
+  return "serviceWorker" in navigator && "PushManager" in window;
+}
+
+export async function initPushNotifications(config: PushInitConfig): Promise<{
+  success: boolean;
+  error?: string;
+  subscription?: PushSubscription;
+}> {
+  if (!isPushNotificationSupported()) {
+    return {
+      success: false,
+      error: "Push notifications are not supported in this browser",
+    };
   }
 
   try {
-    const registration = await navigator.serviceWorker.register("/worker.js");
+    const workerPath = config.serviceWorkerPath || "/worker.js";
+    const registration = await navigator.serviceWorker.register(workerPath);
 
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
       config.onPermissionDenied?.();
-      return;
+      return {
+        success: false,
+        error: "Push notification permission denied",
+      };
     }
 
     const subscription = await registration.pushManager.subscribe({
@@ -39,7 +52,7 @@ export async function initPushNotifications(
       applicationServerKey: urlBase64ToUint8Array(config.vapidPublicKey),
     });
 
-    await fetch(config.subscribeUrl, {
+    const response = await fetch(config.subscribeUrl, {
       method: "POST",
       body: JSON.stringify(subscription),
       headers: {
@@ -47,9 +60,27 @@ export async function initPushNotifications(
       },
     });
 
+    if (!response.ok) {
+      return {
+        success: false,
+        error: `Failed to register subscription: HTTP ${response.status}: ${response.statusText}`,
+      };
+    }
+
     config.onSuccess?.(subscription);
+
+    return {
+      success: true,
+      subscription,
+    };
   } catch (err) {
-    console.error("Push notification setup failed:", err);
+    return {
+      success: false,
+      error:
+        err instanceof Error
+          ? err.message
+          : "Unknown error during push notification setup",
+    };
   }
 }
 
