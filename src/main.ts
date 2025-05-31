@@ -38,7 +38,7 @@ export function usePushNotifications(options: PushInitConfig) {
     return outputArray;
   }
 
-  async function subscribeToPushNotifications(): Promise<{
+  async function subscribe(): Promise<{
     success: boolean;
     error?: string;
     subscription?: PushSubscription;
@@ -98,7 +98,7 @@ export function usePushNotifications(options: PushInitConfig) {
     }
   }
 
-  async function triggerPushNotification(payload: {
+  async function trigger(payload: {
     title: string;
     body: string;
     icon?: string;
@@ -141,7 +141,7 @@ export function usePushNotifications(options: PushInitConfig) {
   }
 
   return {
-    subscribeToPushNotifications,
-    triggerPushNotification,
+    subscribe,
+    trigger,
   };
 }
