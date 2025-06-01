@@ -1,42 +1,12 @@
 import { useLogger } from "./logger";
-
-export interface PushInitConfig {
-  serviceWorkerPath?: string;
-  onPermissionDenied?: () => void;
-  onSuccess?: (subscription: PushSubscription) => void;
-}
-
-export interface PushNotificationPayload {
-  title: string;
-  body: string;
-  icon?: string;
-  badge?: string;
-  tag?: string;
-  requireInteraction?: boolean;
-  silent?: boolean;
-  renotify?: boolean;
-  image?: string;
-  timestamp?: number;
-  actions?: string[];
-  vibrate?: number[];
-  lang?: string;
-  dir?: string;
-  data?: Record<string, any>;
-}
-
-export interface PushNotificationsAPI {
-  subscribe: () => Promise<{
-    success: boolean;
-    error?: string;
-    subscription?: PushSubscription;
-  }>;
-  trigger: (
-    payload: PushNotificationPayload
-  ) => Promise<{ success: boolean; error?: string }>;
-}
+import type {
+  PushInitConfig,
+  PushNotificationsAPI,
+  PushNotificationPayload,
+} from "./types";
 
 export function usePushNotifications(
-  options: PushInitConfig
+  options: PushInitConfig = {}
 ): PushNotificationsAPI {
   const vapidPublicKey =
     "BGJZlj6wOKENtIi6pd1jLR_WWBSaOHL6N3Mk0hDbd8P3WXPEi7UHH16bkMsddxAMR1TQmovggzU82rpSkzxBsIc";
