@@ -141,7 +141,7 @@ export function usePushNotifications(
       const response = await fetch(notifyEndpoint, {
         method: "POST",
         body: JSON.stringify({
-          deviceIds,
+          device_ids: deviceIds,
           payload,
         }),
         headers: {
