@@ -1,4 +1,5 @@
 import { useLogger } from "./logger";
+import { getOrCreateDeviceId } from "./deviceId";
 import type {
   PushInitConfig,
   PushNotificationsAPI,
@@ -75,6 +76,8 @@ export function usePushNotifications(
         };
       }
 
+      const deviceId = getOrCreateDeviceId();
+
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
@@ -82,7 +85,10 @@ export function usePushNotifications(
 
       const response = await fetch(subscribeEndpoint, {
         method: "POST",
-        body: JSON.stringify(subscription),
+        body: JSON.stringify({
+          deviceId,
+          subscription,
+        }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -121,31 +127,21 @@ export function usePushNotifications(
   }
 
   async function trigger(
-    payload: PushNotificationPayload
+    payload: PushNotificationPayload,
+    deviceIds: string[]
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      const registration = await navigator.serviceWorker.getRegistration();
-      if (!registration) {
+      if (deviceIds.length === 0) {
         useLogger().error({
-          message: "Service worker not found",
+          message: "No device IDs provided",
           metadata: {},
         });
-        return { success: false, error: "Service worker not found" };
+        return { success: false, error: "No device IDs provided" };
       }
-
-      const subscription = await registration.pushManager.getSubscription();
-      if (!subscription) {
-        useLogger().error({
-          message: "Push subscription not found",
-          metadata: {},
-        });
-        return { success: false, error: "Push subscription not found" };
-      }
-
       const response = await fetch(notifyEndpoint, {
         method: "POST",
         body: JSON.stringify({
-          subscription,
+          deviceIds,
           payload,
         }),
         headers: {

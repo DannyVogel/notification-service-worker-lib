@@ -15,7 +15,8 @@ export interface PushNotificationsAPI {
     subscription?: PushSubscription;
   }>;
   trigger: (
-    payload: PushNotificationPayload
+    payload: PushNotificationPayload,
+    deviceIds: string[]
   ) => Promise<{ success: boolean; error?: string }>;
 }
 
@@ -33,7 +34,6 @@ export interface NotificationOptions {
   badge?: string;
   image?: string;
   tag?: string;
-  data?: any;
   requireInteraction?: boolean;
   silent?: boolean;
   renotify?: boolean;
@@ -42,6 +42,7 @@ export interface NotificationOptions {
   vibrate?: number | number[];
   lang?: string;
   dir?: NotificationDirection;
+  data?: any;
 }
 
 export interface NotificationPayload extends NotificationOptions {
