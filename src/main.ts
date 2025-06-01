@@ -24,7 +24,20 @@ export interface PushNotificationPayload {
   data?: Record<string, any>;
 }
 
-export function usePushNotifications(options: PushInitConfig) {
+export interface PushNotificationsAPI {
+  subscribe: () => Promise<{
+    success: boolean;
+    error?: string;
+    subscription?: PushSubscription;
+  }>;
+  trigger: (
+    payload: PushNotificationPayload
+  ) => Promise<{ success: boolean; error?: string }>;
+}
+
+export function usePushNotifications(
+  options: PushInitConfig
+): PushNotificationsAPI {
   const vapidPublicKey =
     "BGJZlj6wOKENtIi6pd1jLR_WWBSaOHL6N3Mk0hDbd8P3WXPEi7UHH16bkMsddxAMR1TQmovggzU82rpSkzxBsIc";
   const baseURL = "https://push-service-8l4z.onrender.com";
