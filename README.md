@@ -2,6 +2,8 @@
 
 A lightweight JavaScript library for setting up web push notifications in frontend web clients. This library simplifies the process of registering service workers and managing push notification subscriptions.
 
+Subscription and notification endpoints are provided by the [webpushkit push-service](https://github.com/DannyVogel/push-service) project.
+
 ## Features
 
 - Easy registration of service workers for push notifications
@@ -33,7 +35,6 @@ import { usePushNotifications } from "webpushkit";
 // Create the notification composable
 const useNotifications = usePushNotifications({
   serviceWorkerPath: "/worker.js", // optional, defaults to "/worker.js"
-  logger: false, // enable/disable logging
   onPermissionDenied: () => {
     console.log("Notification permission was denied");
   },
@@ -75,7 +76,6 @@ Creates a push notification composable with subscription and notification method
 
 - `config` (Object): Configuration object with the following properties:
   - `serviceWorkerPath` (String, optional): Path to the service worker file, defaults to "/worker.js"
-  - `logger` (Boolean, required): Enable or disable console logging
   - `onPermissionDenied` (Function, optional): Callback function triggered when notification permission is denied
   - `onSuccess` (Function, optional): Callback function triggered when subscription is successful, receives the subscription object as a parameter
 
@@ -99,6 +99,17 @@ Triggers a push notification (useful for testing or client-side notifications).
   - `title` (String, required): The notification title
   - `body` (String, required): The notification body text
   - `icon` (String, optional): URL to an icon for the notification
+  - `badge` (String, optional): URL to a badge for the notification
+  - `tag` (String, optional): A tag for the notification
+  - `requireInteraction` (Boolean, optional): Whether the notification should require interaction
+  - `silent` (Boolean, optional): Whether the notification should be silent
+  - `renotify` (Boolean, optional): Whether the notification should be re-notified
+  - `image` (String, optional): URL to an image for the notification
+  - `timestamp` (Number, optional): A timestamp for the notification
+  - `actions` (Array, optional): An array of actions for the notification
+  - `vibrate` (Array, optional): A vibrate pattern for the notification
+  - `lang` (String, optional): The language of the notification
+  - `dir` (String, optional): The direction of the notification
   - `data` (Object, optional): Additional data to include with the notification
 
 **Returns**: `Promise<{ success: boolean; error?: string }>`
