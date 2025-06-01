@@ -20,6 +20,7 @@ export function usePushNotifications(options: PushInitConfig) {
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
       options.onPermissionDenied?.();
+      console.log("Notification Permission denied");
       return false;
     }
     return true;
