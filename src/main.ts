@@ -6,6 +6,24 @@ export interface PushInitConfig {
   onSuccess?: (subscription: PushSubscription) => void;
 }
 
+export interface PushNotificationPayload {
+  title: string;
+  body: string;
+  icon?: string;
+  badge?: string;
+  tag?: string;
+  requireInteraction?: boolean;
+  silent?: boolean;
+  renotify?: boolean;
+  image?: string;
+  timestamp?: number;
+  actions?: string[];
+  vibrate?: number[];
+  lang?: string;
+  dir?: string;
+  data?: Record<string, any>;
+}
+
 export function usePushNotifications(options: PushInitConfig) {
   const vapidPublicKey =
     "BGJZlj6wOKENtIi6pd1jLR_WWBSaOHL6N3Mk0hDbd8P3WXPEi7UHH16bkMsddxAMR1TQmovggzU82rpSkzxBsIc";
@@ -119,12 +137,9 @@ export function usePushNotifications(options: PushInitConfig) {
     }
   }
 
-  async function trigger(payload: {
-    title: string;
-    body: string;
-    icon?: string;
-    data?: Record<string, any>;
-  }): Promise<{ success: boolean; error?: string }> {
+  async function trigger(
+    payload: PushNotificationPayload
+  ): Promise<{ success: boolean; error?: string }> {
     try {
       const registration = await navigator.serviceWorker.getRegistration();
       if (!registration) {
