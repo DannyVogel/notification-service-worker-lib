@@ -6,16 +6,14 @@ self.addEventListener("push", function (event) {
   const handlePush = async () => {
     try {
       const options = {
-        body: data.body,
-        icon: "/pwa-192x192.png",
-        badge: "/pwa-192x192.png",
-        tag: "nap-notification",
-        requireInteraction: true,
-        silent: false,
-        renotify: false,
-        data: {
-          url: data.url || "/",
-        },
+        body: data.body || "You have a new notification",
+        icon: data.icon ?? undefined,
+        badge: data.badge ?? undefined,
+        tag: data.tag ?? undefined,
+        requireInteraction: data.requireInteraction ?? false,
+        silent: data.silent ?? false,
+        renotify: data.renotify ?? false,
+        data,
       };
 
       await self.registration.showNotification(
