@@ -1,4 +1,9 @@
-import logger from "./logger";
+function logError(message, metadata) {
+  console.error(
+    `webpushkit log: [${new Date().toLocaleString()}] ${message}`,
+    metadata
+  );
+}
 
 self.addEventListener("push", function (event) {
   const data = event.data?.json() || {};
@@ -27,9 +32,8 @@ self.addEventListener("push", function (event) {
         options
       );
     } catch (error) {
-      logger.error("Service worker: Error displaying notification", {
+      logError("Service worker: Error displaying notification", {
         error: error.message,
-        timestamp: Date.now(),
       });
     }
   };
@@ -45,9 +49,8 @@ self.addEventListener("notificationclick", function (event) {
       const url = event.notification.data?.url || "/";
       event.waitUntil(clients.openWindow(url));
     } catch (error) {
-      logger.error("Service worker: Error handling notification click", {
+      logError("Service worker: Error handling notification click", {
         error: error.message,
-        timestamp: Date.now(),
       });
     }
   };
