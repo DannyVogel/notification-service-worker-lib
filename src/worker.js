@@ -13,6 +13,12 @@ self.addEventListener("push", function (event) {
         requireInteraction: data.requireInteraction ?? false,
         silent: data.silent ?? false,
         renotify: data.renotify ?? false,
+        image: data.image ?? undefined,
+        timestamp: data.timestamp ?? undefined,
+        actions: data.actions ?? undefined,
+        vibrate: data.vibrate ?? undefined,
+        lang: data.lang ?? undefined,
+        dir: data.dir ?? undefined,
         data,
       };
 
