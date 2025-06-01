@@ -1,8 +1,9 @@
+import { useLogger } from "./logger";
+
 export interface PushInitConfig {
   serviceWorkerPath?: string;
   onPermissionDenied?: () => void;
   onSuccess?: (subscription: PushSubscription) => void;
-  logger: boolean;
 }
 
 export function usePushNotifications(options: PushInitConfig) {
@@ -19,8 +20,11 @@ export function usePushNotifications(options: PushInitConfig) {
   async function requestPermission(): Promise<boolean> {
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
+      useLogger().log({
+        message: "Push notification permission denied",
+        metadata: {},
+      });
       options.onPermissionDenied?.();
-      console.log("Notification Permission denied");
       return false;
     }
     return true;
@@ -45,6 +49,10 @@ export function usePushNotifications(options: PushInitConfig) {
     subscription?: PushSubscription;
   }> {
     if (!isPushNotificationSupported()) {
+      useLogger().log({
+        message: "Push notifications are not supported in this browser",
+        metadata: {},
+      });
       return {
         success: false,
         error: "Push notifications are not supported in this browser",
@@ -56,6 +64,10 @@ export function usePushNotifications(options: PushInitConfig) {
 
       const permission = await requestPermission();
       if (!permission) {
+        useLogger().log({
+          message: "Push notification permission denied",
+          metadata: {},
+        });
         return {
           success: false,
           error: "Push notification permission denied",
@@ -76,6 +88,10 @@ export function usePushNotifications(options: PushInitConfig) {
       });
 
       if (!response.ok) {
+        useLogger().error({
+          message: `Failed to register subscription: HTTP ${response.status}: ${response.statusText}`,
+          metadata: {},
+        });
         return {
           success: false,
           error: `Failed to register subscription: HTTP ${response.status}: ${response.statusText}`,
@@ -89,6 +105,10 @@ export function usePushNotifications(options: PushInitConfig) {
         subscription,
       };
     } catch (err) {
+      useLogger().error({
+        message: `Failed to register subscription: ${err}`,
+        metadata: {},
+      });
       return {
         success: false,
         error:
@@ -107,12 +127,22 @@ export function usePushNotifications(options: PushInitConfig) {
   }): Promise<{ success: boolean; error?: string }> {
     try {
       const registration = await navigator.serviceWorker.getRegistration();
-      if (!registration)
+      if (!registration) {
+        useLogger().error({
+          message: "Service worker not found",
+          metadata: {},
+        });
         return { success: false, error: "Service worker not found" };
+      }
 
       const subscription = await registration.pushManager.getSubscription();
-      if (!subscription)
+      if (!subscription) {
+        useLogger().error({
+          message: "Push subscription not found",
+          metadata: {},
+        });
         return { success: false, error: "Push subscription not found" };
+      }
 
       const response = await fetch(notifyEndpoint, {
         method: "POST",
@@ -126,6 +156,10 @@ export function usePushNotifications(options: PushInitConfig) {
       });
 
       if (!response.ok) {
+        useLogger().error({
+          message: `Failed to trigger notification: HTTP ${response.status}: ${response.statusText}`,
+          metadata: {},
+        });
         return {
           success: false,
           error: `HTTP ${response.status}: ${response.statusText}`,
@@ -134,6 +168,10 @@ export function usePushNotifications(options: PushInitConfig) {
 
       return { success: true };
     } catch (err) {
+      useLogger().error({
+        message: `Failed to trigger notification: ${err}`,
+        metadata: {},
+      });
       return {
         success: false,
         error: err instanceof Error ? err.message : "Unknown error",
